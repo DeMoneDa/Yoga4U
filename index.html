@@ -2,164 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yoga Asana Recommender - Yoga4U</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yoga4U - Asana Recommender</title>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      padding: 20px;
-      background: #f0f9f4;
-    }
-    h1 {
-      color: #2e7d32;
-      text-align: center;
-    }
-    label, select, input {
-      font-size: 16px;
-      margin: 10px 0;
-    }
-    #results {
-      margin-top: 20px;
-    }
-    .asana {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      background-color: #ffffff;
-    }
-    .asana img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .asana h3 {
-      margin-top: 0;
-      color: #1b5e20;
-    }
-    .highlight {
-      background-color: #d0f0c0;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+    h1 { text-align: center; color: #2c3e50; }
+    .input-group { display: flex; justify-content: center; margin-bottom: 20px; gap: 10px; }
+    select, input[type="text"] { padding: 10px; width: 250px; border-radius: 5px; border: 1px solid #ccc; }
+    .results { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+    .card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; width: 300px; }
+    .card h3 { margin-top: 0; color: #2980b9; }
+    .card img { width: 100%; border-radius: 10px; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <h1>🧘 Yoga4U - Asana Recommender</h1>
-  <p>Select a goal or enter your concern (e.g., "digestion", "flexibility", "lower limbs"):</p>
-
-  <label for="goalSelect">Choose a goal:</label>
-  <select id="goalSelect">
-    <option value="">-- Select a Goal --</option>
-    <option value="digestion">Digestion</option>
-    <option value="flexibility">Flexibility</option>
-    <option value="joint mobility">Joint Mobility</option>
-    <option value="energy flow">Energy Flow</option>
-  </select>
-
-  <br>
-
-  <label for="searchInput">Or type your issue:</label><br>
-  <input type="text" id="searchInput" placeholder="e.g., improve digestion, knee pain, stiffness..." size="50"/>
-
-  <button onclick="recommend()">Recommend Asanas</button>
-
-  <div id="results"></div>
+  <h1>Yoga4U - Asana Recommender</h1>
+  <div class="input-group">
+    <select id="goalSelector">
+      <option value="">-- Select a Goal --</option>
+      <option value="flexibility">Flexibility</option>
+      <option value="digestion">Digestion</option>
+      <option value="mobility">Mobility</option>
+      <option value="energy">Energy Flow</option>
+      <option value="joint health">Joint Health</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Type your need or goal..." />
+  </div>
+  <div class="results" id="results"></div>
 
   <script>
     const asanas = [
-      // Pavanamuktasana Series 1 - Anti Rheumatic
-      {
-        name: "Toe Bending",
-        group: "Pavanamuktasana Series 1",
-        benefits: ["joint mobility", "anti rheumatic", "lower limbs"],
-        instructions: "Sit with legs extended. Bend all toes forward and backward slowly 10-15 times.",
-        image: "https://www.yogajournal.com/wp-content/uploads/2021/12/Toe-Stretch.jpg"
-      },
-      {
-        name: "Ankle Bending",
-        group: "Pavanamuktasana Series 1",
-        benefits: ["joint mobility", "anti rheumatic", "legs", "ankles"],
-        instructions: "Sit and stretch your legs. Bend and flex ankles forward and back. Repeat 10 times.",
-        image: "https://www.ekhartyoga.com/media/images/articles/content/ankle_rotations.jpg"
-      },
-      {
-        name: "Knee Bending",
-        group: "Pavanamuktasana Series 1",
-        benefits: ["joint mobility", "knee health", "anti rheumatic"],
-        instructions: "Hold thigh and bring knee to chest. Straighten and bend repeatedly.",
-        image: "https://www.sarvyoga.com/wp-content/uploads/2015/06/leg-raising-yoga.jpg"
-      },
+      // Pavanamuktasana Series 1 – Anti Rheumatic group (17)
+      { name: "Toe Bending", group: "Pavanamuktasana Series 1", goal: ["joint health", "mobility"], instructions: "Sit with legs extended. Bend and stretch toes slowly.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Ankle Bending", group: "Pavanamuktasana Series 1", goal: ["joint health", "mobility"], instructions: "Flex and extend ankles back and forth.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Ankle Rotation", group: "Pavanamuktasana Series 1", goal: ["mobility", "joint health"], instructions: "Rotate ankles clockwise and anticlockwise.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Knee Bending", group: "Pavanamuktasana Series 1", goal: ["joint health"], instructions: "Bend and stretch one leg at a time from knee.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Knee Crank", group: "Pavanamuktasana Series 1", goal: ["joint health", "mobility"], instructions: "Hold shin and rotate the knee.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Hip Rotation", group: "Pavanamuktasana Series 1", goal: ["mobility"], instructions: "Rotate the hip joint while lying down.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Half Butterfly", group: "Pavanamuktasana Series 1", goal: ["joint health", "flexibility"], instructions: "Move one leg's knee up and down while foot rests on the opposite thigh.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Full Butterfly", group: "Pavanamuktasana Series 1", goal: ["flexibility"], instructions: "Sit with soles together and flap knees gently.", duration: "2-3 mins", image: "https://via.placeholder.com/300" },
+      { name: "Hand Clenching", group: "Pavanamuktasana Series 1", goal: ["joint health"], instructions: "Make a tight fist and release.", duration: "1 min", image: "https://via.placeholder.com/300" },
+      { name: "Wrist Bending", group: "Pavanamuktasana Series 1", goal: ["joint health"], instructions: "Bend wrist forward and backward.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Wrist Rotation", group: "Pavanamuktasana Series 1", goal: ["mobility"], instructions: "Rotate wrist clockwise and anticlockwise.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Elbow Bending", group: "Pavanamuktasana Series 1", goal: ["mobility"], instructions: "Bend and straighten elbow with control.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Shoulder Rotation", group: "Pavanamuktasana Series 1", goal: ["mobility"], instructions: "Rotate shoulders front and back.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Neck Bending", group: "Pavanamuktasana Series 1", goal: ["flexibility"], instructions: "Bend neck forward and backward gently.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Neck Rotation", group: "Pavanamuktasana Series 1", goal: ["mobility"], instructions: "Slowly rotate neck clockwise and anticlockwise.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Side Bending", group: "Pavanamuktasana Series 1", goal: ["flexibility"], instructions: "Bend the torso sideways while standing.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Spinal Twisting", group: "Pavanamuktasana Series 1", goal: ["mobility"], instructions: "Twist spine while sitting upright.", duration: "2 mins", image: "https://via.placeholder.com/300" },
 
-      // Add more from Series 1 as needed...
+      // Pavanamuktasana Series 2 – Digestive group (8)
+      { name: "Straight Leg Raise", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Lie on back and raise one leg at a time.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Leg Lock Pose (Pawanmuktasana)", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Pull knee to chest while lying down.", duration: "2-3 mins", image: "https://via.placeholder.com/300" },
+      { name: "Cycling", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Lie down and mimic cycling with legs.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Churning the Mill", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Sit with legs spread and rotate arms as if churning.", duration: "2-3 mins", image: "https://via.placeholder.com/300" },
+      { name: "Rowing", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Mimic rowing a boat while seated.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Rocking & Rolling", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Hold knees to chest and rock side to side.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Cobra Stretch", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Lie prone and raise chest with hands.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Wind Relieving Pose", group: "Pavanamuktasana Series 2", goal: ["digestion"], instructions: "Lie down and hug both knees to chest.", duration: "2-3 mins", image: "https://via.placeholder.com/300" },
 
-      // Pavanamuktasana Series 2 – Digestive
-      {
-        name: "Janu Naman",
-        group: "Pavanamuktasana Series 2",
-        benefits: ["digestion", "flexibility", "lower back"],
-        instructions: "Sit with legs extended. Bend one knee to chest, hold for a moment, then extend. Repeat 10 times each leg.",
-        image: "https://www.arhantayoga.org/blog/wp-content/uploads/2021/12/Janu-Naman.jpg"
-      },
-      {
-        name: "Jhulana Lurhakanasana",
-        group: "Pavanamuktasana Series 2",
-        benefits: ["digestion", "abdominal massage"],
-        instructions: "Lie on back. Bend knees to chest, hold shins, and rock side to side. Do for 30 seconds.",
-        image: "https://i.ytimg.com/vi/0qBIC_gqQEY/hqdefault.jpg"
-      },
-
-      // Add more from Series 2...
-
-      // Pavanamuktasana Series 3 – Energy Block Release
-      {
-        name: "Shakti Bandhasana",
-        group: "Pavanamuktasana Series 3",
-        benefits: ["energy flow", "spine flexibility"],
-        instructions: "Lie on back. Bend knees, feet on ground. Raise pelvis up and down slowly. Repeat 10 times.",
-        image: "https://yogavastu.com/wp-content/uploads/2020/07/bridge_pose_setu_bandha_sarvangasana.jpg"
-      },
-      {
-        name: "Supta Udarakarshanasana",
-        group: "Pavanamuktasana Series 3",
-        benefits: ["digestion", "energy balance"],
-        instructions: "Lie on back, knees bent. Drop both knees to the side while keeping shoulders grounded. Repeat both sides.",
-        image: "https://www.ashmayuyoga.com/wp-content/uploads/2021/05/Supta-Udarakarshanasana.jpg"
-      }
-
-      // Add more from Series 3...
+      // Pavanamuktasana Series 3 – Energy Block Release (9)
+      { name: "Jhulana Lurhakanasana", group: "Pavanamuktasana Series 3", goal: ["energy"], instructions: "Swinging cradling movement while lying.", duration: "2-3 mins", image: "https://via.placeholder.com/300" },
+      { name: "Supta Udarakarshanasana", group: "Pavanamuktasana Series 3", goal: ["energy"], instructions: "Lying spinal twist with legs folded.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Shashankasana", group: "Pavanamuktasana Series 3", goal: ["energy", "relaxation"], instructions: "Child pose – sit on heels, forehead to floor.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Vakrasana", group: "Pavanamuktasana Series 3", goal: ["energy", "mobility"], instructions: "Seated twist with one knee raised.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Ardha Matsyendrasana", group: "Pavanamuktasana Series 3", goal: ["energy"], instructions: "Seated spinal twist with elbow over knee.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Padahastasana", group: "Pavanamuktasana Series 3", goal: ["energy", "flexibility"], instructions: "Standing forward bend, touch toes.", duration: "2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Paschimottanasana", group: "Pavanamuktasana Series 3", goal: ["energy", "flexibility"], instructions: "Seated forward bend.", duration: "2-3 mins", image: "https://via.placeholder.com/300" },
+      { name: "Ushtrasana", group: "Pavanamuktasana Series 3", goal: ["energy"], instructions: "Camel pose – backbend on knees.", duration: "1-2 mins", image: "https://via.placeholder.com/300" },
+      { name: "Supta Vajrasana", group: "Pavanamuktasana Series 3", goal: ["energy"], instructions: "Reclining thunderbolt pose.", duration: "2-3 mins", image: "https://via.placeholder.com/300" }
     ];
 
-    function recommend() {
-      const goal = document.getElementById("goalSelect").value.toLowerCase();
-      const query = document.getElementById("searchInput").value.toLowerCase();
-      const resultsDiv = document.getElementById("results");
-
-      const matched = asanas.filter(asana =>
-        asana.benefits.some(b => b.includes(goal)) ||
-        asana.benefits.some(b => b.includes(query)) ||
-        asana.name.toLowerCase().includes(query) ||
-        asana.group.toLowerCase().includes(query)
-      );
-
-      resultsDiv.innerHTML = "";
-
-      if (matched.length === 0) {
-        resultsDiv.innerHTML = "<p>No asanas found. Try a different keyword or goal.</p>";
-        return;
-      }
-
-      matched.forEach(asana => {
-        const block = document.createElement("div");
-        block.className = "asana";
-        block.innerHTML = `
-          <h3>${asana.name}</h3>
-          <p><strong>Group:</strong> ${asana.group}</p>
-          <p><strong>Benefits:</strong> ${asana.benefits.join(", ")}</p>
-          <p><strong>How to do:</strong> ${asana.instructions}</p>
-          <img src="${asana.image}" alt="${asana.name}" />
-        `;
-        resultsDiv.appendChild(block);
+    function displayAsanas(filter) {
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+      const query = filter.toLowerCase();
+      const filtered = asanas.filter(a => a.goal.some(g => g.includes(query)) || a.name.toLowerCase().includes(query));
+      filtered.forEach(asana => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${asana.name}</h3>
+                          <p><strong>Group:</strong> ${asana.group}</p>
+                          <p><strong>Instructions:</strong> ${asana.instructions}</p>
+                          <p><strong>Duration:</strong> ${asana.duration}</p>
+                          <img src="${asana.image}" alt="${asana.name}" />`;
+        results.appendChild(card);
       });
     }
+
+    document.getElementById('goalSelector').addEventListener('change', (e) => displayAsanas(e.target.value));
+    document.getElementById('searchInput').addEventListener('input', (e) => displayAsanas(e.target.value));
   </script>
 </body>
 </html>
