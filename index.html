@@ -1,139 +1,163 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yoga Asana Recommender</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Yoga Asana Recommender - Yoga4U</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background: #f1f7f5;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      background: #f0f9f4;
     }
     h1 {
-      color: #2c3e50;
+      color: #2e7d32;
+      text-align: center;
     }
-    .input-section, .results {
-      margin-top: 1.5rem;
+    label, select, input {
+      font-size: 16px;
+      margin: 10px 0;
     }
-    .asana-card {
-      background: #ffffff;
+    #results {
+      margin-top: 20px;
+    }
+    .asana {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 15px;
       border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 1rem;
-      margin: 1rem 0;
+      background-color: #ffffff;
     }
-    .asana-card img {
+    .asana img {
       max-width: 100%;
       height: auto;
       border-radius: 8px;
     }
-    label, select, input {
-      font-size: 1rem;
-      margin-right: 0.5rem;
+    .asana h3 {
+      margin-top: 0;
+      color: #1b5e20;
+    }
+    .highlight {
+      background-color: #d0f0c0;
     }
   </style>
 </head>
 <body>
-  <h1>🧘 Yoga Asana Recommender</h1>
+  <h1>🧘 Yoga4U - Asana Recommender</h1>
+  <p>Select a goal or enter your concern (e.g., "digestion", "flexibility", "lower limbs"):</p>
 
-  <div class="input-section">
-    <label for="goal">Select a Goal:</label>
-    <select id="goal">
-      <option value="">--Choose--</option>
-      <option value="lower-limbs">Strengthen Lower Limbs</option>
-      <option value="digestion">Improve Digestion</option>
-      <option value="stress">Stress Relief</option>
-    </select>
+  <label for="goalSelect">Choose a goal:</label>
+  <select id="goalSelect">
+    <option value="">-- Select a Goal --</option>
+    <option value="digestion">Digestion</option>
+    <option value="flexibility">Flexibility</option>
+    <option value="joint mobility">Joint Mobility</option>
+    <option value="energy flow">Energy Flow</option>
+  </select>
 
-    <label for="query">Or Type Your Query:</label>
-    <input type="text" id="query" placeholder="e.g., tight hips" />
-    <button onclick="searchAsanas()">Search</button>
-  </div>
+  <br>
 
-  <div class="results" id="results"></div>
+  <label for="searchInput">Or type your issue:</label><br>
+  <input type="text" id="searchInput" placeholder="e.g., improve digestion, knee pain, stiffness..." size="50"/>
+
+  <button onclick="recommend()">Recommend Asanas</button>
+
+  <div id="results"></div>
 
   <script>
-    const asanaData = {
-      "lower-limbs": [
-        {
-          name: "Utkatasana (Chair Pose)",
-          image: "https://www.yogajournal.com/wp-content/uploads/2021/10/Chair-Pose.jpg",
-          instructions: "Stand tall. Inhale and raise arms overhead. Exhale and bend knees, lowering hips like sitting in a chair. Keep knees over ankles. Hold for 30-60 seconds.",
-          duration: "30-60 seconds, 2-3 rounds",
-          precautions: "Avoid if you have knee pain or lower back issues."
-        },
-        {
-          name: "Virabhadrasana II (Warrior II)",
-          image: "https://www.yogajournal.com/wp-content/uploads/2021/10/Warrior-2.jpg",
-          instructions: "Step feet apart. Turn one foot out 90°. Bend that knee and extend arms sideways at shoulder height. Hold posture.",
-          duration: "30 seconds each side",
-          precautions: "Avoid if you have severe hip or knee injury."
-        },
-        {
-          name: "Vrikshasana (Tree Pose)",
-          image: "https://www.yogajournal.com/wp-content/uploads/2021/10/Tree-Pose.jpg",
-          instructions: "Stand tall. Shift weight to one foot. Place the other foot on inner thigh or calf. Join palms at chest. Focus on balance.",
-          duration: "30 seconds each side",
-          precautions: "Avoid if you have balance issues without support."
-        }
-      ],
-      "digestion": [
-        {
-          name: "Pavanamuktasana (Wind-Relieving Pose)",
-          image: "https://www.yogajournal.com/wp-content/uploads/2021/10/Wind-Relieving-Pose.jpg",
-          instructions: "Lie on your back. Inhale, hug both knees to chest. Exhale, lift head toward knees. Breathe slowly.",
-          duration: "30 seconds - 1 minute",
-          precautions: "Avoid during pregnancy or hernia."
-        }
-      ],
-      "stress": [
-        {
-          name: "Shavasana (Corpse Pose)",
-          image: "https://www.yogajournal.com/wp-content/uploads/2021/10/Savasana.jpg",
-          instructions: "Lie on your back. Legs apart, arms beside body. Close eyes. Relax body and mind. Focus on breath.",
-          duration: "5-10 minutes",
-          precautions: "Use a blanket under the head if needed."
-        }
-      ]
-    };
+    const asanas = [
+      // Pavanamuktasana Series 1 - Anti Rheumatic
+      {
+        name: "Toe Bending",
+        group: "Pavanamuktasana Series 1",
+        benefits: ["joint mobility", "anti rheumatic", "lower limbs"],
+        instructions: "Sit with legs extended. Bend all toes forward and backward slowly 10-15 times.",
+        image: "https://www.yogajournal.com/wp-content/uploads/2021/12/Toe-Stretch.jpg"
+      },
+      {
+        name: "Ankle Bending",
+        group: "Pavanamuktasana Series 1",
+        benefits: ["joint mobility", "anti rheumatic", "legs", "ankles"],
+        instructions: "Sit and stretch your legs. Bend and flex ankles forward and back. Repeat 10 times.",
+        image: "https://www.ekhartyoga.com/media/images/articles/content/ankle_rotations.jpg"
+      },
+      {
+        name: "Knee Bending",
+        group: "Pavanamuktasana Series 1",
+        benefits: ["joint mobility", "knee health", "anti rheumatic"],
+        instructions: "Hold thigh and bring knee to chest. Straighten and bend repeatedly.",
+        image: "https://www.sarvyoga.com/wp-content/uploads/2015/06/leg-raising-yoga.jpg"
+      },
 
-    function searchAsanas() {
-      const goal = document.getElementById("goal").value;
-      const query = document.getElementById("query").value.toLowerCase();
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "";
+      // Add more from Series 1 as needed...
 
-      let matchedAsanas = [];
+      // Pavanamuktasana Series 2 – Digestive
+      {
+        name: "Janu Naman",
+        group: "Pavanamuktasana Series 2",
+        benefits: ["digestion", "flexibility", "lower back"],
+        instructions: "Sit with legs extended. Bend one knee to chest, hold for a moment, then extend. Repeat 10 times each leg.",
+        image: "https://www.arhantayoga.org/blog/wp-content/uploads/2021/12/Janu-Naman.jpg"
+      },
+      {
+        name: "Jhulana Lurhakanasana",
+        group: "Pavanamuktasana Series 2",
+        benefits: ["digestion", "abdominal massage"],
+        instructions: "Lie on back. Bend knees to chest, hold shins, and rock side to side. Do for 30 seconds.",
+        image: "https://i.ytimg.com/vi/0qBIC_gqQEY/hqdefault.jpg"
+      },
 
-      if (goal && asanaData[goal]) {
-        matchedAsanas = asanaData[goal];
-      } else if (query) {
-        for (const key in asanaData) {
-          matchedAsanas.push(...asanaData[key].filter(asana =>
-            asana.name.toLowerCase().includes(query) ||
-            asana.instructions.toLowerCase().includes(query)
-          ));
-        }
+      // Add more from Series 2...
+
+      // Pavanamuktasana Series 3 – Energy Block Release
+      {
+        name: "Shakti Bandhasana",
+        group: "Pavanamuktasana Series 3",
+        benefits: ["energy flow", "spine flexibility"],
+        instructions: "Lie on back. Bend knees, feet on ground. Raise pelvis up and down slowly. Repeat 10 times.",
+        image: "https://yogavastu.com/wp-content/uploads/2020/07/bridge_pose_setu_bandha_sarvangasana.jpg"
+      },
+      {
+        name: "Supta Udarakarshanasana",
+        group: "Pavanamuktasana Series 3",
+        benefits: ["digestion", "energy balance"],
+        instructions: "Lie on back, knees bent. Drop both knees to the side while keeping shoulders grounded. Repeat both sides.",
+        image: "https://www.ashmayuyoga.com/wp-content/uploads/2021/05/Supta-Udarakarshanasana.jpg"
       }
 
-      if (matchedAsanas.length === 0) {
-        resultsDiv.innerHTML = "<p>No matching asanas found. Try another query or goal.</p>";
+      // Add more from Series 3...
+    ];
+
+    function recommend() {
+      const goal = document.getElementById("goalSelect").value.toLowerCase();
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const resultsDiv = document.getElementById("results");
+
+      const matched = asanas.filter(asana =>
+        asana.benefits.some(b => b.includes(goal)) ||
+        asana.benefits.some(b => b.includes(query)) ||
+        asana.name.toLowerCase().includes(query) ||
+        asana.group.toLowerCase().includes(query)
+      );
+
+      resultsDiv.innerHTML = "";
+
+      if (matched.length === 0) {
+        resultsDiv.innerHTML = "<p>No asanas found. Try a different keyword or goal.</p>";
         return;
       }
 
-      matchedAsanas.forEach(asana => {
-        const card = document.createElement("div");
-        card.className = "asana-card";
-        card.innerHTML = `
+      matched.forEach(asana => {
+        const block = document.createElement("div");
+        block.className = "asana";
+        block.innerHTML = `
           <h3>${asana.name}</h3>
+          <p><strong>Group:</strong> ${asana.group}</p>
+          <p><strong>Benefits:</strong> ${asana.benefits.join(", ")}</p>
+          <p><strong>How to do:</strong> ${asana.instructions}</p>
           <img src="${asana.image}" alt="${asana.name}" />
-          <p><strong>Instructions:</strong> ${asana.instructions}</p>
-          <p><strong>Duration:</strong> ${asana.duration}</p>
-          <p><strong>Precautions:</strong> ${asana.precautions}</p>
         `;
-        resultsDiv.appendChild(card);
+        resultsDiv.appendChild(block);
       });
     }
   </script>
