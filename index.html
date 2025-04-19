@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yoga Recommender</title>
   <style>
     body {
@@ -13,7 +13,7 @@
     h1 {
       text-align: center;
     }
-    select, input {
+    select, input, button {
       display: block;
       margin: 10px auto;
       padding: 10px;
@@ -22,10 +22,6 @@
       max-width: 400px;
     }
     button {
-      display: block;
-      margin: 10px auto;
-      padding: 10px 20px;
-      font-size: 16px;
       background-color: #4CAF50;
       color: white;
       border: none;
@@ -60,26 +56,26 @@
     <option value="joint pain">Joint Pain Relief</option>
     <option value="energy">Energy Flow</option>
     <option value="neck">Neck Exercise</option>
-     <option value="Improve balance">Improve balance</option>
-      <option value="Strengthen legs">Strengthen legs</option>
-      <option value="Enhance focus">Enhance focus</option>
-      <option value="Improve flexibility">Improve flexibility</option>
-      <option value="Enhance concentration">Enhance concentration</option>
-      <option value="Improve posture">Improve posture</option>
-      <option value="Tone thighs">Tone thighs</option>
-      <option value="Strengthen core and ankles">Strengthen core and ankles</option>
-      <option value="Improve stability">Improve stability</option>
+    <option value="Improve balance">Improve balance</option>
+    <option value="Strengthen legs">Strengthen legs</option>
+    <option value="Enhance focus">Enhance focus</option>
+    <option value="Improve flexibility">Improve flexibility</option>
+    <option value="Enhance concentration">Enhance concentration</option>
+    <option value="Improve posture">Improve posture</option>
+    <option value="Tone thighs">Tone thighs</option>
+    <option value="Strengthen core and ankles">Strengthen core and ankles</option>
+    <option value="Improve stability">Improve stability</option>
   </select>
 
   <label for="searchInput">Or Enter a Query:</label>
-  <input type="text" id="searchInput" placeholder="e.g. neck exercise, balance, digestion, energy">
+  <input type="text" id="searchInput" placeholder="e.g. neck exercise, balance, digestion, energy" />
   <button onclick="searchAsanas()">Search</button>
 
   <div id="results"></div>
 
   <script>
     const asanas = [
-      // Pavanamuktasana Series 1 – Anti Rheumatic
+      // Anti Rheumatic
       { name: "Toe Bending", group: "Anti Rheumatic", goals: ["flexibility", "joint pain"], image: "", instructions: "Sit with legs stretched. Slowly bend and straighten your toes." },
       { name: "Ankle Bending", group: "Anti Rheumatic", goals: ["flexibility", "joint pain"], image: "", instructions: "Move your ankles forward and backward in a smooth motion." },
       { name: "Ankle Rotation", group: "Anti Rheumatic", goals: ["flexibility", "joint pain"], image: "", instructions: "Rotate each ankle clockwise and counterclockwise." },
@@ -93,48 +89,44 @@
       { name: "Shoulder Socket Rotation", group: "Anti Rheumatic", goals: ["flexibility", "joint pain", "neck"], image: "", instructions: "Rotate shoulders with fingers on shoulders in circular motion." },
       { name: "Neck Movements", group: "Anti Rheumatic", goals: ["neck", "flexibility"], image: "", instructions: "Move head up-down, side-to-side, rotate gently." },
 
-      // Pavanamuktasana Series 2 – Digestive
+      // Digestive
       { name: "Abdominal Breathing", group: "Digestive", goals: ["digestion", "energy"], image: "", instructions: "Lie on back and breathe deeply using abdomen." },
       { name: "Straight Leg Raise", group: "Digestive", goals: ["digestion"], image: "", instructions: "Lift one straight leg slowly to 90° and down." },
       { name: "Supta Pawanmuktasana", group: "Digestive", goals: ["digestion"], image: "", instructions: "Hug knees to chest and rock gently." },
 
-      // Pavanamuktasana Series 3 – Energy Block Release
+      // Energy Block Release
       { name: "Jhulana Lurhakanasana", group: "Energy Block Release", goals: ["energy"], image: "", instructions: "Rock side-to-side holding knees." },
       { name: "Chakki Chalanasana", group: "Energy Block Release", goals: ["energy", "flexibility"], image: "", instructions: "Sit with legs apart, rotate arms like a grinder." },
-      { name: "Nauka Sanchalanasana", group: "Energy Block Release", goals: ["energy"], image: "", instructions: "Simulate rowing a boat while sitting with legs stretched." }
+      { name: "Nauka Sanchalanasana", group: "Energy Block Release", goals: ["energy"], image: "", instructions: "Simulate rowing a boat while sitting with legs stretched." },
 
-      // Balance Postures
+      // Standing Postures – Balancing Poses
       {
         name: "Vrikshasana (Tree Pose)",
         group: "Standing Postures – Balancing Poses",
         goals: ["Improve balance", "Strengthen legs", "Enhance focus"],
-        duration: "30 seconds to 1 minute each side",
         instructions: "Stand tall and shift your weight onto your left foot. Bend your right knee and place your right foot high on the inner left thigh. Join your palms in Namaste at your chest or raise them overhead. Focus on a fixed point ahead to maintain balance. Breathe deeply and hold the posture. Release gently and repeat on the other side.",
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/8/88/Vrikshasana_tree_pose.jpg"
+        image: "https://upload.wikimedia.org/wikipedia/commons/8/88/Vrikshasana_tree_pose.jpg"
       },
       {
         name: "Garudasana (Eagle Pose)",
         group: "Standing Postures – Balancing Poses",
         goals: ["Strengthen lower body", "Improve flexibility", "Enhance concentration"],
-        duration: "30 seconds each side",
         instructions: "Stand upright. Bend your knees slightly, lift your right leg and cross it over the left thigh. Hook the right foot behind the left calf if possible. Cross your arms in front with the left arm over the right, bending elbows and bringing palms together. Keep your spine straight and gaze ahead. Maintain balance and breathe. Release slowly and repeat on the other side.",
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Garudasana.jpg"
+        image: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Garudasana.jpg"
       },
       {
         name: "Natarajasana (Dancer’s Pose)",
         group: "Standing Postures – Balancing Poses",
         goals: ["Improve posture", "Strengthen legs", "Enhance grace and stability"],
-        duration: "20 to 30 seconds each side",
         instructions: "Stand straight and shift your weight to your left foot. Bend your right knee and hold the right ankle from behind. Lift the right leg up while stretching your left arm forward. Keep your chest lifted and torso upright. Find your balance and breathe deeply. Hold, then release and repeat on the other side.",
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/9/97/Natarajasana.jpg"
+        image: "https://upload.wikimedia.org/wikipedia/commons/9/97/Natarajasana.jpg"
       },
       {
         name: "Utkatasana (Chair Pose – Balancing Variation)",
         group: "Standing Postures – Balancing Poses",
         goals: ["Tone thighs", "Strengthen core and ankles", "Improve stability"],
-        duration: "30 to 45 seconds",
         instructions: "Stand with feet together. Inhale and raise your arms overhead. Exhale and bend your knees, lowering into a squat as if sitting on a chair. Shift your weight slightly onto the toes to challenge balance. Engage your core, lengthen the spine, and look forward. Hold the pose, then slowly come up with control.",
-        image_url: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Utkatasana.jpg"
+        image: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Utkatasana.jpg"
       }
     ];
 
@@ -153,7 +145,7 @@
       resultsDiv.innerHTML = "";
 
       const matches = asanas.filter(asana =>
-        asana.goals.some(g => g.includes(goalOrQuery)) ||
+        asana.goals.some(g => g.toLowerCase().includes(goalOrQuery)) ||
         asana.name.toLowerCase().includes(goalOrQuery) ||
         asana.group.toLowerCase().includes(goalOrQuery)
       );
@@ -166,9 +158,11 @@
       matches.forEach(asana => {
         const div = document.createElement("div");
         div.className = "asana";
-        div.innerHTML = `<h3>${asana.name}</h3>
-                          <p><strong>Group:</strong> ${asana.group}</p>
-                          <p><strong>Instructions:</strong> ${asana.instructions}</p>`;
+        div.innerHTML = `
+          <h3>${asana.name}</h3>
+          <p><strong>Group:</strong> ${asana.group}</p>
+          <p><strong>Instructions:</strong> ${asana.instructions}</p>
+        `;
         if (asana.image) {
           div.innerHTML += `<img src="${asana.image}" alt="${asana.name}">`;
         }
